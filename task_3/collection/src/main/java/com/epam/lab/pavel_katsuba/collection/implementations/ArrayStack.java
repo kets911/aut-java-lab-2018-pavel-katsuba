@@ -4,7 +4,6 @@ import com.epam.lab.pavel_katsuba.collection.Constants;
 import com.epam.lab.pavel_katsuba.collection.exceptions.EmptyCollectionException;
 import com.epam.lab.pavel_katsuba.collection.interfaces.Iterator;
 
-import java.util.Arrays;
 import java.util.Comparator;
 
 public class ArrayStack<E> extends AbstractStack<E> {
@@ -82,7 +81,7 @@ public class ArrayStack<E> extends AbstractStack<E> {
         @Override
         public E getNext() {
             if(recentIndex >= size){
-                throw new IllegalArgumentException();
+                throw new IllegalStateException(Constants.END_COLLECTION_EXCEPTION);
             }
             return elements[recentIndex = nextIndex--];
         }

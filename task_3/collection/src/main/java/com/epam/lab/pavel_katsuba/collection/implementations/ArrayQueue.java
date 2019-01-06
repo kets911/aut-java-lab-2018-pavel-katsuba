@@ -4,8 +4,6 @@ import com.epam.lab.pavel_katsuba.collection.Constants;
 import com.epam.lab.pavel_katsuba.collection.exceptions.EmptyCollectionException;
 import com.epam.lab.pavel_katsuba.collection.interfaces.Iterator;
 
-import java.util.Arrays;
-
 public class ArrayQueue<E> extends AbstractQueue<E> {
     private final static int DEFAULT_CAPACITY = 10;
     private E[] elements;

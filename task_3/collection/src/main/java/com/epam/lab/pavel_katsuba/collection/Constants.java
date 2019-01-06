@@ -8,4 +8,5 @@ public class Constants {
     public static final String NULL_ELEMENT_EXCEPTION = "Element can't be null";
     public static final String NULL_COMPARATOR_EXCEPTION = "Comparator can't be null";
     public static final String REMOVE_EXCEPTION = "remove can't be done twice in the row";
+    public static final String NULL_MAP_ARGUMENTS_EXCEPTION = "Key and value can't be null";
 }

@@ -4,8 +4,6 @@ import com.epam.lab.pavel_katsuba.collection.Constants;
 import com.epam.lab.pavel_katsuba.collection.interfaces.List;
 import com.epam.lab.pavel_katsuba.collection.interfaces.Map;
 
-import java.util.Arrays;
-
 public class ArrayMap<K, V> implements Map<K, V> {
     private static final int DEFAULT_CAPACITY = 16;
     private ArrayMapEntity<K, V>[][] buckets;
@@ -210,7 +208,7 @@ public class ArrayMap<K, V> implements Map<K, V> {
 
         public ArrayMapEntity(K key, V value) {
             if (key == null || value == null){
-                throw new IllegalArgumentException("Key and value can't be null");
+                throw new IllegalArgumentException(Constants.NULL_MAP_ARGUMENTS_EXCEPTION);
             }
             this.key = key;
             this.value = value;

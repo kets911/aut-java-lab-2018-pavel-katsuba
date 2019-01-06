@@ -5,7 +5,7 @@ import com.epam.lab.pavel_katsuba.collection.exceptions.EmptyCollectionException
 import com.epam.lab.pavel_katsuba.collection.interfaces.Collection;
 import com.epam.lab.pavel_katsuba.collection.interfaces.Iterator;
 
-import java.util.Arrays;
+import java.lang.reflect.Array;
 import java.util.Comparator;
 
 public class LinkedList<E> extends AbstractList<E> {
@@ -165,7 +165,7 @@ public class LinkedList<E> extends AbstractList<E> {
     @SuppressWarnings("unchecked")
     public E[] toArray(E[] elements) {
         if (size > elements.length){
-            elements = (E[]) Arrays.copyOf(elements, size, elements.getClass());
+            elements = (E[]) Array.newInstance(elements.getClass().getComponentType(), size);
         }
         Node<E> nodeStep = head;
         for (int i = 0; i< size; i++){

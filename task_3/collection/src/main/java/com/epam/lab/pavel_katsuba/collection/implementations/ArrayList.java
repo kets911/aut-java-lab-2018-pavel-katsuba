@@ -5,7 +5,7 @@ import com.epam.lab.pavel_katsuba.collection.exceptions.EmptyCollectionException
 import com.epam.lab.pavel_katsuba.collection.interfaces.Collection;
 import com.epam.lab.pavel_katsuba.collection.interfaces.Iterator;
 
-import java.util.Arrays;
+import java.lang.reflect.Array;
 import java.util.Comparator;
 
 public class ArrayList<E> extends AbstractList<E> {
@@ -178,14 +178,16 @@ public class ArrayList<E> extends AbstractList<E> {
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public E[] toArray(E[] elements) {
         if (size > elements.length){
-            return (E[]) Arrays.copyOf(this.elements, size, elements.getClass());
+            @SuppressWarnings("unchecked")
+            E[] newElements = (E[]) Array.newInstance(elements.getClass().getComponentType(), size);
+            System.arraycopy(this.elements, 0, newElements, 0, size);
+            return newElements;
         }
         System.arraycopy(this.elements, 0, elements, 0, size);
         if (size < elements.length){
-            for (int i = size; i<elements.length; i++){
+            for (int i = size; i < elements.length; i++){
                 elements[i] = null;
             }
         }
