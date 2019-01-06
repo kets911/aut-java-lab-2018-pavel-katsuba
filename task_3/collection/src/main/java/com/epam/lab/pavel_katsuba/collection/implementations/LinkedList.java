@@ -273,6 +273,7 @@ public class LinkedList<E> extends AbstractList<E> {
                 node.prev.next = node;
             } else {
                 lastReturned.prev = new Node<>(element, lastReturned, null);
+                head = lastReturned.prev;
             }
             size++;
             int result = nextIndex - 1;
