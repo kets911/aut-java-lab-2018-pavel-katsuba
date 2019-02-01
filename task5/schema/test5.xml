@@ -1,0 +1,39 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE event SYSTEM "test5.xsd">
+<event id="5">
+	<heading type="title">Monday's gossip column</heading>
+	<heading type="title-footer">Thanks for reading</heading>
+	<external-link source="http://www.bbc.com/sport/0/25707984"/>
+	<doc-level position="right">
+		<doc-level position="left">
+			<para type="text">For a list of confirmed transfers, check out the transfers page.</para>
+			<para type="text">
+				<date>31/12/2013</date>
+			</para>
+		</doc-level>
+		<doc-level position="center">
+			<para type="comment">TRANSFER GOSSIP</para>
+		</doc-level>
+		<para type="image">
+			<image source="transfer.jpg" description="Big Spending"/>
+		</para>
+	</doc-level>
+	<doc-level type="redbox">
+		<para type="unordered-list" style="square">
+			<list-item>Bayern Munich are set to rival Paris St-Germain and Napoli in the race to sign Chelsea attacking midfielder Juan Mata, 25.</list-item>
+			<list-item>Arsenal are planning to offer £30m for Newcastle midfielder Yohan Cabaye, 27, and 23-year-old full-back Davide Santon.</list-item>
+			<list-item>
+				<para type="unordered-list" style="circle">
+					<list-item>Wolfsburg director of sport Klaus Allofs is confident that a deal has nearly been secured to sign Chelsea midfielder Kevin de Bruyne, 22.</list-item>
+					<list-item>Chelsea boss Jose Mourinho is keen to sign 19-year-old St Etienne defender Kurt Zouma as a long-term replacement for John Terry.</list-item>
+				</para>
+			</list-item>
+		</para>
+	</doc-level>
+	<doc-level position="center">
+		<para type="num">
+			<num>2014</num>			
+		</para>
+		<h1>Best year ever</h1>
+	</doc-level>
+</event>
