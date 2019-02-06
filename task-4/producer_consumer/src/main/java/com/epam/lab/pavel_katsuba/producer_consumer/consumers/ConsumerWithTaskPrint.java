@@ -10,7 +10,7 @@ import java.util.concurrent.locks.ReentrantLock;
 
 public class ConsumerWithTaskPrint implements Consumer {
     private LinkedBlockingQueue<Task> pool;
-    private static final ReentrantLock lock = new ReentrantLock();
+    private static final ReentrantLock LOCK = new ReentrantLock();
 
     public ConsumerWithTaskPrint(LinkedBlockingQueue<Task> pool) {
         this.pool = pool;
@@ -20,7 +20,7 @@ public class ConsumerWithTaskPrint implements Consumer {
     public void run() {
         while (!Thread.currentThread().isInterrupted()){
             try {
-                lock.lock();
+                LOCK.lock();
                 Iterator<Task> iterator = pool.iterator();
                 while (iterator.hasNext()){
                     Task task = iterator.next();
@@ -31,7 +31,7 @@ public class ConsumerWithTaskPrint implements Consumer {
                     }
                 }
             } finally {
-                lock.unlock();
+                LOCK.unlock();
             }
             Thread.yield();
         }

@@ -6,11 +6,14 @@ import com.epam.lab.pavel_katsuba.producer_consumer.task_impls.TaskReturn;
 
 import java.util.Iterator;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class ConsumerWithTaskReturn implements Consumer {
     private LinkedBlockingQueue<Task> pool;
-    private static final ReentrantLock lock = new ReentrantLock();
+    private static final ReentrantLock LOCK = new ReentrantLock();
 
     private static final String RETURN_IN = " return in ";
 
@@ -22,7 +25,7 @@ public class ConsumerWithTaskReturn implements Consumer {
     public void run() {
         while (!Thread.currentThread().isInterrupted()){
             try {
-                lock.lock();
+                LOCK.lock();
                 Iterator<Task> iterator = pool.iterator();
                 while (iterator.hasNext()){
                     Task task = iterator.next();
@@ -35,7 +38,7 @@ public class ConsumerWithTaskReturn implements Consumer {
                     }
                 }
             } finally {
-                lock.unlock();
+                LOCK.unlock();
             }
             Thread.yield();
         }
