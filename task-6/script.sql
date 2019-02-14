@@ -1,4 +1,3 @@
-drop database library;
 create database library;
 use library;
 create table books(idBook int auto_increment primary key, bookName VARCHAR(200) unique, publishingDate date, isTaken boolean default false);
