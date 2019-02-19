@@ -1,6 +1,8 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<!DOCTYPE event SYSTEM "test5.xsd">
-<event id="5">
+<event id="5"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns = "http://example.com"
+	   xsi:schemaLocation="http://example.com test5.xsd">
 	<heading type="title">Monday's gossip column</heading>
 	<heading type="title-footer">Thanks for reading</heading>
 	<external-link source="http://www.bbc.com/sport/0/25707984"/>

@@ -4,18 +4,18 @@
 <!ELEMENT heading (#PCDATA)>
 <!ATTLIST heading type (title | title-footer) #REQUIRED>
 
-<!ELEMENT external-link ()>
+<!ELEMENT external-link EMPTY>
 <!ATTLIST external-link source CDATA "">
 
 <!ELEMENT doc-level (doc-level*, para*, h1*)>
 <!ATTLIST doc-level position CDATA #IMPLIED
         type CDATA #IMPLIED>
 
-<!ELEMENT para (date*, image*, list-item*, num*, #PCDATA*)>
+<!ELEMENT para (#PCDATA | date | image | list-item | num)*>
 <!ATTLIST para type CDATA #REQUIRED
         style CDATA #IMPLIED>
 
-<!ELEMENT list-item (para+, #PCDATA*)>
+<!ELEMENT list-item (#PCDATA | para)*>
 <!ELEMENT date (#PCDATA)>
 <!ELEMENT image (#PCDATA)>
 <!ATTLIST image source CDATA #REQUIRED
