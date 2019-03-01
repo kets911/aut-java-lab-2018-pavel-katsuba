@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema"
+        targetNamespace="http://example.com"
+        xmlns:tns="http://example.com" elementFormDefault="qualified">
+    <complexType name="Heading" mixed="true">
+        <attribute name="type" type="tns:Title"/>
+    </complexType>
+    <simpleType name="simpleString">
+        <restriction base="string"/>
+    </simpleType>
+    <simpleType name="Title">
+        <restriction base="string">
+            <enumeration value="title" />
+            <enumeration value="title-footer" />
+        </restriction>
+    </simpleType>
+
+    <complexType name="External-link">
+        <attribute name="source" type="anyURI"/>
+    </complexType>
+
+    <complexType name="Doc-level">
+        <sequence>
+            <element name="doc-level" type="tns:Doc-level" minOccurs="0" maxOccurs="unbounded"/>
+            <element name="para" type="tns:Para" minOccurs="0" maxOccurs="unbounded"/>
+            <element name="h1" type="string" minOccurs="0" maxOccurs="unbounded"/>
+        </sequence>
+        <attribute name="position">
+            <simpleType>
+                <restriction base="string">
+                    <enumeration value="left"/>
+                    <enumeration value="center"/>
+                    <enumeration value="right"/>
+                </restriction>
+            </simpleType>
+        </attribute>
+        <attribute name="type" type="string"/>
+    </complexType>
+
+    <complexType name="Para" mixed="true">
+        <sequence>
+            <element name="date" type="tns:Date" minOccurs="0"/>
+            <element name="image" type="tns:Image" minOccurs="0"/>
+            <element name="list-item" type="tns:List-item" minOccurs="0" maxOccurs="unbounded"/>
+            <element name="num" type="positiveInteger" minOccurs="0"/>
+        </sequence>
+        <attribute name="type" type="string"/>
+        <attribute name="style" type="string"/>
+
+    </complexType>
+    <simpleType name="Date">
+        <restriction base="string">
+            <pattern value="(([0]\d)|([1-2]\d)|[3][0-1])\/(([0]\d)|([1][0-2]))\/\d\d\d\d"/>
+        </restriction>
+    </simpleType>
+    <complexType name="Image">
+        <attribute name="source" type="tns:ImageSource"/>
+        <attribute name="description" type="string"/>
+    </complexType>
+    <simpleType name="ImageSource">
+        <restriction base="string">
+            <pattern value=".*\.(([j][p][g])|([p][n][g]))"/>
+        </restriction>
+    </simpleType>
+
+    <complexType name="List-item" mixed="true">
+        <sequence>
+            <element name="para" type="tns:Para" minOccurs="0"/>
+        </sequence>
+    </complexType>
+
+    <element name="event">
+        <complexType>
+            <sequence>
+                <element name="heading" type="tns:Heading" maxOccurs="2"/>
+                <element name="external-link" type="tns:External-link"/>
+                <element name="doc-level" type="tns:Doc-level" maxOccurs="unbounded"/>
+            </sequence>
+            <attribute name="id" type="positiveInteger" use="required"/>
+        </complexType>
+    </element>
+</schema>
