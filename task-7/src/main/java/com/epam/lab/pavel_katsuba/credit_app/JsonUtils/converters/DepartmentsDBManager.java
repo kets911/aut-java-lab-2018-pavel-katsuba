@@ -35,8 +35,6 @@ public class DepartmentsDBManager implements DBManager<Data> {
     public void setToDB(Data data) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
             String json = gson.toJson(data);
-            System.out.println(file);
-            System.out.println(json);
             writer.write(json);
         } catch (IOException e) {
             throw new DBManagerException(e);

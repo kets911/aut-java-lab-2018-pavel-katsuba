@@ -1,28 +1,20 @@
 package com.epam.lab.pavel_katsuba.credit_app.beans;
 
-import com.epam.lab.pavel_katsuba.credit_app.beans.enums.DiscountTypes;
+import com.epam.lab.pavel_katsuba.credit_app.interfaces.DiscountPeriod;
 import com.epam.lab.pavel_katsuba.credit_app.interfaces.Entity;
-
-import java.time.LocalDate;
 
 public class Discount implements Entity {
     private int id;
-    private DiscountTypes type;
-    private LocalDate date;
-    private LocalDate dateFrom;
-    private LocalDate dateTo;
     private double discount;
+    private DiscountPeriod discountPeriod;
 
     public Discount() {
     }
 
-    public Discount(int id, DiscountTypes type, LocalDate date, LocalDate dateFrom, LocalDate dateTo, double discount) {
+    public Discount(int id, double discount, DiscountPeriod discountPeriod) {
         this.id = id;
-        this.type = type;
-        this.date = date;
-        this.dateFrom = dateFrom;
-        this.dateTo = dateTo;
         this.discount = discount;
+        this.discountPeriod = discountPeriod;
     }
 
     public int getId() {
@@ -33,38 +25,6 @@ public class Discount implements Entity {
         this.id = id;
     }
 
-    public DiscountTypes getType() {
-        return type;
-    }
-
-    public void setType(DiscountTypes type) {
-        this.type = type;
-    }
-
-    public LocalDate getDate() {
-        return date;
-    }
-
-    public void setDate(LocalDate date) {
-        this.date = date;
-    }
-
-    public LocalDate getDateFrom() {
-        return dateFrom;
-    }
-
-    public void setDateFrom(LocalDate dateFrom) {
-        this.dateFrom = dateFrom;
-    }
-
-    public LocalDate getDateTo() {
-        return dateTo;
-    }
-
-    public void setDateTo(LocalDate dateTo) {
-        this.dateTo = dateTo;
-    }
-
     public double getDiscount() {
         return discount;
     }
@@ -73,14 +33,19 @@ public class Discount implements Entity {
         this.discount = discount;
     }
 
+    public DiscountPeriod getDiscountPeriod() {
+        return discountPeriod;
+    }
+
+    public void setDiscountPeriod(DiscountPeriod discountPeriod) {
+        this.discountPeriod = discountPeriod;
+    }
+
     @Override
     public String toString() {
         return "Discount{" +
                 "id=" + id +
-                ", type=" + type +
-                ", date=" + date +
-                ", dateFrom=" + dateFrom +
-                ", dateTo=" + dateTo +
+                ", date=" + discountPeriod +
                 ", discount=" + discount +
                 '}';
     }

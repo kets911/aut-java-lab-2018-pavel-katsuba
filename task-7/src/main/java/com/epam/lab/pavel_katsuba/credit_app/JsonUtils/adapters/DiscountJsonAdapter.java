@@ -1,7 +1,8 @@
 package com.epam.lab.pavel_katsuba.credit_app.JsonUtils.adapters;
 
 import com.epam.lab.pavel_katsuba.credit_app.beans.Discount;
-import com.epam.lab.pavel_katsuba.credit_app.beans.enums.DiscountTypes;
+import com.epam.lab.pavel_katsuba.credit_app.beans.DiscountPeriodMany;
+import com.epam.lab.pavel_katsuba.credit_app.beans.DiscountPeriodOne;
 import com.google.gson.*;
 
 import java.lang.reflect.Type;
@@ -15,6 +16,10 @@ public class DiscountJsonAdapter implements JsonSerializer<Discount>, JsonDeseri
     private static final String DATE = "date";
     private static final String DISCOUNT = "discount";
     private static final String ID = "id";
+    private static final String MANY = "MANY";
+    private static final String ONE = "ONE";
+    private static final String DISCOUNT_PERIOD_MANY = "DiscountPeriodMany";
+    private static final String DISCOUNT_PERIOD_ONE = "DiscountPeriodOne";
 
     @Override
     public Discount deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
@@ -22,17 +27,15 @@ public class DiscountJsonAdapter implements JsonSerializer<Discount>, JsonDeseri
         Discount discount = new Discount();
         int id = object.get(ID).getAsInt();
         discount.setId(id);
-        DiscountTypes discountType = DiscountTypes.valueOf(object.get(TYPE).getAsString().toUpperCase());
-        discount.setType(discountType);
-        if (discountType == DiscountTypes.MANY) {
+        String discountType = object.get(TYPE).getAsString().toUpperCase();
+        if (MANY.equals(discountType)) {
             LocalDate dateFrom = LocalDate.parse(object.get(DATE_FROM).getAsString());
             LocalDate dateTo = LocalDate.parse(object.get(DATE_TO).getAsString());
-            discount.setDateFrom(dateFrom);
-            discount.setDateTo(dateTo);
+            discount.setDiscountPeriod(new DiscountPeriodMany(dateFrom, dateTo));
         }
-        if (discountType == DiscountTypes.ONE) {
+        if (ONE.equals(discountType)) {
             LocalDate date = LocalDate.parse(object.get(DATE).getAsString());
-            discount.setDate(date);
+            discount.setDiscountPeriod(new DiscountPeriodOne(date));
         }
         double percentDiscount = object.get(DISCOUNT).getAsDouble();
         discount.setDiscount(percentDiscount);
@@ -43,14 +46,18 @@ public class DiscountJsonAdapter implements JsonSerializer<Discount>, JsonDeseri
     public JsonElement serialize(Discount discount, Type type, JsonSerializationContext jsonSerializationContext) {
         JsonObject object = new JsonObject();
         object.addProperty(ID, discount.getId());
-        DiscountTypes discountType = discount.getType();
-        object.addProperty(TYPE, discountType.toString());
-        if (discountType == DiscountTypes.MANY) {
-            object.addProperty(DATE_FROM, discount.getDateFrom().toString());
-            object.addProperty(DATE_TO, discount.getDateTo().toString());
+        String typeClassName = discount.getDiscountPeriod().getClass().getSimpleName();
+        if (typeClassName.equals(DISCOUNT_PERIOD_MANY)) {
+            LocalDate dateFrom = ((DiscountPeriodMany) discount.getDiscountPeriod()).getDateFrom();
+            LocalDate dateTo = ((DiscountPeriodMany) discount.getDiscountPeriod()).getDateTo();
+            object.addProperty(TYPE, MANY);
+            object.addProperty(DATE_FROM, dateFrom.toString());
+            object.addProperty(DATE_TO, dateTo.toString());
         }
-        if (discountType == DiscountTypes.ONE) {
-            object.addProperty(DATE, discount.getDate().toString());
+        if (typeClassName.equals(DISCOUNT_PERIOD_ONE)) {
+            LocalDate date = ((DiscountPeriodOne) discount.getDiscountPeriod()).getDate();
+            object.addProperty(TYPE, ONE);
+            object.addProperty(DATE, date.toString());
         }
         object.addProperty(DISCOUNT, discount.getDiscount());
         return object;

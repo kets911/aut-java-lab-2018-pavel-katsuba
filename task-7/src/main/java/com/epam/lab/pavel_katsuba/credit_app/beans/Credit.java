@@ -71,9 +71,6 @@ public class Credit implements Entity {
     }
 
     public void setRate(double rate) {
-        if (rate < 0) {
-            this.rate = 0;
-        }
         this.rate = rate;
     }
 

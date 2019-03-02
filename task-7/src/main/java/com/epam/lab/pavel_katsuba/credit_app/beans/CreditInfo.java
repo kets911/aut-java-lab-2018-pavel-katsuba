@@ -65,22 +65,22 @@ public class CreditInfo {
         this.status = status;
     }
 
-    @Override
-    public String toString() {
-        return "credit id: " + (credit == null ? "null" : credit.getId()) +
-                "\nuser id: " + (credit == null ? "null" : credit.getUserId()) +
-                "\nuser name: " + user.getName() + " " + user.getSecondName() +
-                "\ntransaction count: " + (transactionCount == 0 ? "null" : transactionCount) +
-                "\ndebt: " + debt +
-                "\nperiod: " + (credit == null ? "null" : credit.getPeriod()) +
-                "\nstatus: " + (status == CreditStatus.DONE ? status + " " + doneDate : status);
-    }
-
     public LocalDate getDoneDate() {
         return doneDate;
     }
 
     public void setDoneDate(LocalDate doneDate) {
         this.doneDate = doneDate;
+    }
+
+    @Override
+    public String toString() {
+        return "credit id: " + (credit == null ? "null" : credit.getId()) +
+                " user id: " + (credit == null ? "null" : credit.getUserId()) +
+                " user name: " + user.getName() + " " + user.getSecondName() +
+                " transaction count: " + (transactionCount == 0 ? "null" : transactionCount) +
+                " debt: " + debt +
+                " period: " + (credit == null ? "null" : credit.getPeriod()) +
+                " status: " + (status == CreditStatus.DONE ? status + " " + doneDate : status);
     }
 }

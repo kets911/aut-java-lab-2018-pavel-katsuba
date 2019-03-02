@@ -4,7 +4,7 @@ import com.epam.lab.pavel_katsuba.credit_app.JsonUtils.converters.DepartmentsDBM
 import com.epam.lab.pavel_katsuba.credit_app.beans.*;
 import com.epam.lab.pavel_katsuba.credit_app.beans.enums.CreditStatus;
 import com.epam.lab.pavel_katsuba.credit_app.beans.enums.Currency;
-import com.epam.lab.pavel_katsuba.credit_app.beans.enums.DiscountTypes;
+import com.epam.lab.pavel_katsuba.credit_app.beans.enums.SortType;
 import com.epam.lab.pavel_katsuba.credit_app.dao_impl.TransactionDAOImpl;
 import com.epam.lab.pavel_katsuba.credit_app.exceptions.DBManagerException;
 import com.epam.lab.pavel_katsuba.credit_app.interfaces.BankDAO;
@@ -29,6 +29,11 @@ public class CreditService {
     private BankDAO<Discount> discountDAO;
     private BankDAO<Event> eventDAO;
     private BankDAO<Transaction> transactionDAO;
+    private static final String FILE_NAME_HEAD = "db_";
+    private static final String FILE_NAME_TAIL = ".json";
+    private static final String DEPARTMENT_PATTERN = FILE_NAME_HEAD + "[a-z]+([A-Z]*[0-9]*)?" + FILE_NAME_TAIL;
+    private static final String NOT_FILE_EXCEPTION = "there is not file: " + FILE_NAME_HEAD;
+
 
     public CreditService() {
     }
@@ -41,14 +46,12 @@ public class CreditService {
         this.transactionDAO = transactionDAO;
     }
 
-    public void normalizeDB(Settings settings, String srcDirectory) {
-        String FILE_NAME_HEAD = "db_";
-        String FILE_NAME_TAIL = ".json";
+    public void prepareDB(Settings settings, String srcDirectory) {
         List<String> useDepartments = settings.getUseDepartments();
         DBManager<Data> converter;
         final File directory = new File(srcDirectory);
         if (useDepartments.size() == 0) {
-            File[] dbFiles = directory.listFiles((dir, name) -> name.matches(FILE_NAME_HEAD + "[a-z]+([A-Z]*[0-9]*)?" + FILE_NAME_TAIL));
+            File[] dbFiles = directory.listFiles((dir, name) -> name.matches(DEPARTMENT_PATTERN));
             if (dbFiles != null) {
                 for (File file : dbFiles) {
                     converter = new DepartmentsDBManager(file);
@@ -56,12 +59,13 @@ public class CreditService {
                 }
             }
         } else {
+            final String filePathHead = directory.getPath() + "/" + FILE_NAME_HEAD;
             for (String dep : useDepartments) {
                 try {
-                    converter = new DepartmentsDBManager(new File(directory.getPath() + "/" + FILE_NAME_HEAD + dep + FILE_NAME_TAIL));
+                    converter = new DepartmentsDBManager(new File(filePathHead + dep + FILE_NAME_TAIL));
                     transportTransactions(converter);
                 } catch (DBManagerException e) {
-                    LOGGER.log(Level.INFO, "there is not file: " + FILE_NAME_HEAD + dep + FILE_NAME_TAIL, e);
+                    LOGGER.log(Level.INFO, NOT_FILE_EXCEPTION + dep + FILE_NAME_TAIL, e);
                 }
             }
         }
@@ -81,13 +85,14 @@ public class CreditService {
         List<Event> allEvents = eventDAO.readAll();
         Event currentEvent = getLastEventForTransaction(transaction, allEvents);
         if (currentEvent == null) {
-            if (transaction.getCurrency() == Currency.EUR) {
-                return BigDecimal.valueOf(settings.getStartCostEUR()).multiply(transaction.getMoney());
+            switch (transaction.getCurrency()) {
+                case EUR:
+                    return BigDecimal.valueOf(settings.getStartCostEUR()).multiply(transaction.getMoney());
+                case USD:
+                    return BigDecimal.valueOf(settings.getStartCostUSD()).multiply(transaction.getMoney());
+                default:
+                    return transaction.getMoney();
             }
-            if (transaction.getCurrency() == Currency.USD) {
-                return BigDecimal.valueOf(settings.getStartCostUSD()).multiply(transaction.getMoney());
-            }
-            throw new RuntimeException("wrong currency");
         }
         return currentEvent.getCost().multiply(transaction.getMoney());
     }
@@ -104,7 +109,7 @@ public class CreditService {
         return currentEvent;
     }
 
-    private BigDecimal sumDebtForTimeTransaction(BigDecimal sumDebtAfterLastTransaction, LocalDate lastTrans, LocalDate transTime, Credit credit) {
+    private BigDecimal sumDebtForTimeTransaction(BigDecimal sumDebt, LocalDate lastTrans, LocalDate transTime, Credit credit) {
         LocalDate creditDate = credit.getDate();
         long countPeriodsBeforeNow;
         long countPeriodsBeforeLastTrans;
@@ -117,7 +122,7 @@ public class CreditService {
                 countRateTimes = countPeriodsBeforeNow - countPeriodsBeforeLastTrans;
                 dateLastAddedPercents = creditDate.plusDays(countPeriodsBeforeLastTrans);
                 for (long i = 0; i < countRateTimes; i++) {
-                    sumDebtAfterLastTransaction = addPercents(sumDebtAfterLastTransaction, dateLastAddedPercents.plusDays(1), credit);
+                    sumDebt = addPercents(sumDebt, dateLastAddedPercents.plusDays(1), credit);
                 }
                 break;
             case WEEK:
@@ -126,7 +131,7 @@ public class CreditService {
                 countRateTimes = countPeriodsBeforeNow - countPeriodsBeforeLastTrans;
                 dateLastAddedPercents = creditDate.plusWeeks(countPeriodsBeforeLastTrans);
                 for (long i = 0; i < countRateTimes; i++) {
-                    sumDebtAfterLastTransaction = addPercents(sumDebtAfterLastTransaction, dateLastAddedPercents.plusWeeks(1), credit);
+                    sumDebt = addPercents(sumDebt, dateLastAddedPercents.plusWeeks(1), credit);
                 }
                 break;
             case MONTH:
@@ -135,7 +140,7 @@ public class CreditService {
                 countRateTimes = countPeriodsBeforeNow - countPeriodsBeforeLastTrans;
                 dateLastAddedPercents = creditDate.plusMonths(countPeriodsBeforeLastTrans);
                 for (long i = 0; i < countRateTimes; i++) {
-                    sumDebtAfterLastTransaction = addPercents(sumDebtAfterLastTransaction, dateLastAddedPercents.plusMonths(1), credit);
+                    sumDebt = addPercents(sumDebt, dateLastAddedPercents.plusMonths(1), credit);
                 }
                 break;
             case YEAR:
@@ -144,27 +149,20 @@ public class CreditService {
                 countRateTimes = countPeriodsBeforeNow - countPeriodsBeforeLastTrans;
                 dateLastAddedPercents = creditDate.plusYears(countPeriodsBeforeLastTrans);
                 for (long i = 0; i < countRateTimes; i++) {
-                    sumDebtAfterLastTransaction = addPercents(sumDebtAfterLastTransaction, dateLastAddedPercents.plusYears(1), credit);
+                    sumDebt = addPercents(sumDebt, dateLastAddedPercents.plusYears(1), credit);
                 }
                 break;
             default:
                 throw new RuntimeException("wrong period = " + credit.getPeriod());
         }
-        return sumDebtAfterLastTransaction;
+        return sumDebt;
     }
 
     private BigDecimal addPercents(BigDecimal sumDebt, LocalDate dateAddPercents, Credit credit) {
         double rate = credit.getRate();
         for (Discount discount : discountDAO.readAll()) {
-            if (discount.getType() == DiscountTypes.MANY) {
-                if (dateAddPercents.isAfter(discount.getDateFrom().minusDays(1)) && dateAddPercents.isBefore(discount.getDateTo().plusDays(1))) {
-                    rate = rate - discount.getDiscount();
-                }
-            }
-            if (discount.getType() == DiscountTypes.ONE) {
-                if (dateAddPercents.isEqual(discount.getDate())) {
-                    rate = rate - discount.getDiscount();
-                }
+            if (discount.getDiscountPeriod().isHit(dateAddPercents)) {
+                rate = rate - discount.getDiscount();
             }
         }
         rate = rate < 0 ? 0 : rate;
@@ -174,7 +172,10 @@ public class CreditService {
     }
 
     public List<CreditInfo> getCreditInfo(Settings settings) {
+        ShowFor showFor = settings.getShowFor();
         return userDAO.readAll().stream()
+                .filter(user -> showFor == null ? user != null
+                        : showFor.getShowForMatcher().isMatch(user))
                 .flatMap(user -> creditDao.readAll().stream()
                         .filter(credit -> settings.getDateFrom() == null
                                 ? credit != null
@@ -182,14 +183,14 @@ public class CreditService {
                         .collect(Collectors.toList()).stream())
                 .flatMap(credit -> {
                     CreditInfo creditInfo = new CreditInfo();
-                    if (credit.getDate().isAfter(settings.getDateFrom())) {
+                    if (credit.getDate().isAfter(settings.getDateFrom().minusDays(1))) {
                         creditInfo.setCredit(credit);
                         creditInfo.setStatus(CreditStatus.IN_PROGRESS);
                         List<Transaction> transactionsForCredit = transactionDAO.readAll().stream()
                                 .filter(transaction -> settings.getDateTo() == null
                                         ? transaction.getCreditId() == credit.getId()
                                         : transaction.getCreditId() == credit.getId()
-                                        && transaction.getDate().isBefore(settings.getDateTo()))
+                                        && transaction.getDate().isBefore(settings.getDateTo().plusDays(1)))
                                 .sorted(Comparator.comparing(Transaction::getDate))
                                 .collect(Collectors.toList());
                         LocalDate lastTransaction = credit.getDate();
@@ -217,7 +218,11 @@ public class CreditService {
                     creditInfo.setUser(userDAO.read(credit.getUserId()));
                     return Stream.of(creditInfo);
                 })
+                .sorted(settings.getSortBy() == SortType.DEBT
+                        ? Comparator.comparing(CreditInfo::getDebt)
+                        : settings.getSortBy() == SortType.NAME
+                        ? (o1, o2) -> o1.getUser().getName().compareTo(o2.getUser().getName())
+                        : Comparator.comparingLong(o -> ChronoUnit.DAYS.between(o.getUser().getBirthday(), LocalDate.now())))
                 .collect(Collectors.toList());
-
     }
 }
