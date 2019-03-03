@@ -11,9 +11,10 @@ public class Printer {
     public static void print(List<CreditInfo> creditInfo) {
         Formatter formatter = new Formatter();
         formatter.format("Credit id\tUser id\t\tUser name\t\tTransaction count\tDebt\t\tPeriod\tStatus\n");
+        String format = "%-9d\t%-8d\t%-15s\t%-18s\t%-8s\t%-5s\t%s\n";
         for (CreditInfo info : creditInfo) {
             Credit credit = info.getCredit();
-            formatter.format("%-9d\t%-8d\t%-15s\t%-18s\t%-8s\t%-5s\t%s\n", credit == null ? null : credit.getId(),
+            formatter.format(format, credit == null ? null : credit.getId(),
                     credit == null ? null : credit.getUserId(),
                     info.getUser().getName() + " " + info.getUser().getSecondName(),
                     info.getTransactionCount() == 0 ? "null" : info.getTransactionCount(),

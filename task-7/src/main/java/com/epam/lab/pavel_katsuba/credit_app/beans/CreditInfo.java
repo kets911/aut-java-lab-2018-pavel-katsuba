@@ -20,7 +20,7 @@ public class CreditInfo {
         this.credit = credit;
         this.user = user;
         this.transactionCount = transactionCount;
-        this.debt = debt;
+        setDebt(debt);
         this.status = status;
         this.doneDate = doneDate;
     }
@@ -54,7 +54,9 @@ public class CreditInfo {
     }
 
     public void setDebt(BigDecimal debt) {
-        this.debt = debt;
+        if (debt.compareTo(BigDecimal.ZERO) < 0) {
+            this.debt = BigDecimal.ZERO;
+        } else this.debt = debt;
     }
 
     public CreditStatus getStatus() {
