@@ -1,0 +1,35 @@
+Message json example:
+{
+	"fromUserId": 2,
+	"toUserId": 1,
+	"createDate": "1999-01-03",
+	"message": "some ansver message!"
+}
+
+Present json example:
+{
+	"fromId": 2,
+	"toId": 1,
+	"creationDate": "1999-01-03",
+	"description": "some present!"
+}
+
+Group json example:
+{
+	"groupName": "supe group",
+	"author": "chudak",
+	"creationDate": "2019-03-17"
+}
+
+User json example:
+{
+	"name" : "Sasha",
+	"surname" : "Kosoy",
+	"birthday" : "1988-02-02"
+}
+
+Auth
+{
+	"name" : "Sasha",
+	"access" : ["user", "friend"]
+}
