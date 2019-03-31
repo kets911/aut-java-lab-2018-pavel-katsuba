@@ -41,6 +41,7 @@ public class ServiceAccessDao implements VneklasnikiDao<ServiceAccessRelate> {
             throw new DataBaseException(e);
         } finally {
             dbManager.closePreparedStatement(preparedStatement);
+            dbManager.putConnection(connection);
         }
     }
 
@@ -61,8 +62,9 @@ public class ServiceAccessDao implements VneklasnikiDao<ServiceAccessRelate> {
             logger.log(Level.WARNING, e.getMessage(), e);
             throw new DataBaseException(e);
         } finally {
-            dbManager.closePreparedStatement(preparedStatement);
             dbManager.closeResultSet(resultSet);
+            dbManager.closePreparedStatement(preparedStatement);
+            dbManager.putConnection(connection);
         }
     }
 
@@ -89,8 +91,9 @@ public class ServiceAccessDao implements VneklasnikiDao<ServiceAccessRelate> {
             logger.log(Level.WARNING, e.getMessage(), e);
             throw new DataBaseException(e);
         } finally {
-            dbManager.closePreparedStatement(preparedStatement);
             dbManager.closeResultSet(resultSet);
+            dbManager.closePreparedStatement(preparedStatement);
+            dbManager.putConnection(connection);
         }
     }
 
@@ -117,8 +120,9 @@ public class ServiceAccessDao implements VneklasnikiDao<ServiceAccessRelate> {
             logger.log(Level.WARNING, e.getMessage(), e);
             throw new DataBaseException(e);
         } finally {
-            dbManager.closePreparedStatement(preparedStatement);
             dbManager.closeResultSet(resultSet);
+            dbManager.closePreparedStatement(preparedStatement);
+            dbManager.putConnection(connection);
         }
     }
 
@@ -136,6 +140,7 @@ public class ServiceAccessDao implements VneklasnikiDao<ServiceAccessRelate> {
             throw new DataBaseException(e);
         } finally {
             dbManager.closePreparedStatement(preparedStatement);
+            dbManager.putConnection(connection);
         }
     }
 
@@ -151,6 +156,7 @@ public class ServiceAccessDao implements VneklasnikiDao<ServiceAccessRelate> {
             throw new DataBaseException(e);
         } finally {
             dbManager.closePreparedStatement(preparedStatement);
+            dbManager.putConnection(connection);
         }
     }
 }

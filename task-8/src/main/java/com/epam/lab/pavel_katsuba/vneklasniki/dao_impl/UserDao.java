@@ -40,6 +40,7 @@ public class UserDao implements VneklasnikiDao<User> {
             throw new DataBaseException("User isn't added", e);
         } finally {
             dbManager.closePreparedStatement(preparedStatement);
+            dbManager.putConnection(connection);
         }
     }
 
@@ -64,6 +65,7 @@ public class UserDao implements VneklasnikiDao<User> {
         } finally {
             dbManager.closeResultSet(resultSet);
             dbManager.closePreparedStatement(preparedStatement);
+            dbManager.putConnection(connection);
         }
     }
 
@@ -90,6 +92,7 @@ public class UserDao implements VneklasnikiDao<User> {
         } finally {
             dbManager.closeResultSet(resultSet);
             dbManager.closePreparedStatement(preparedStatement);
+            dbManager.putConnection(connection);
         }
     }
 
@@ -116,6 +119,7 @@ public class UserDao implements VneklasnikiDao<User> {
         } finally {
             dbManager.closeResultSet(resultSet);
             dbManager.closePreparedStatement(preparedStatement);
+            dbManager.putConnection(connection);
         }
     }
 
@@ -135,6 +139,7 @@ public class UserDao implements VneklasnikiDao<User> {
             throw new DataBaseException(e);
         } finally {
             dbManager.closePreparedStatement(preparedStatement);
+            dbManager.putConnection(connection);
         }
     }
 
@@ -151,6 +156,7 @@ public class UserDao implements VneklasnikiDao<User> {
             throw new DataBaseException(e);
         } finally {
             dbManager.closePreparedStatement(preparedStatement);
+            dbManager.putConnection(connection);
         }
     }
 }

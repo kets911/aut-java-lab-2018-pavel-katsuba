@@ -17,6 +17,8 @@ import java.util.List;
 @Path("/friend")
 @Produces(MediaType.APPLICATION_JSON)
 public class FriendController {
+    public static final String RELATE_EXCEPTION = "Only one relate was added -> %d to %d with id: %d";
+    public static final String FRIENDS_EXIST = "friends with id's: %d, %d already exist";
     private static JsonConverter converter = new JsonConverter();
     private VneklasnikiDao<Friend> friendDao = new FriendDao(MySqlDBManager.instance());
 
@@ -59,13 +61,13 @@ public class FriendController {
             } catch (DataBaseException e) {
                 boolean isDeleted = friendDao.deleteEntity(firstId);
                 if (isDeleted) {
-                    return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+                    return Response.serverError().build();
                 }
-                String exceptMessage = String.format("Only one relate was added -> %d to %d with id: %d", selfUserId, friendUserId, firstId);
-                return Response.serverError().entity(exceptMessage).build();
+                String errorMessage = String.format(RELATE_EXCEPTION, selfUserId, friendUserId, firstId);
+                return Response.serverError().entity(errorMessage).build();
             }
         }
-        return Response.status(400).entity(String.format("friends with id's: %d, %d already exist", selfUserId, friendUserId)).build();
+        return Response.status(400).entity(String.format(FRIENDS_EXIST, selfUserId, friendUserId)).build();
     }
 
     @PUT

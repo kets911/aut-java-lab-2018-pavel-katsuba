@@ -16,6 +16,7 @@ import java.util.List;
 @Path(value = "/user")
 @Produces(MediaType.APPLICATION_JSON)
 public class UserController {
+    public static final String USER_EXIST = "user %s already exist";
     private VneklasnikiDao<User> userDao = new UserDao(MySqlDBManager.instance());
     private JsonConverter converter = new JsonConverter();
 
@@ -28,7 +29,7 @@ public class UserController {
             userId = userDao.create(user);
             return Response.ok(userId).build();
         }
-        return Response.status(400).entity(String.format("user %s already exist", user)).build();
+        return Response.status(400).entity(String.format(USER_EXIST, user)).build();
     }
 
     @GET

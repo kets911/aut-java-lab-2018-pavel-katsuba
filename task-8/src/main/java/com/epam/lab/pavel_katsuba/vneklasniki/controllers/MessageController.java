@@ -16,6 +16,7 @@ import java.util.List;
 @Path("/message")
 @Produces(MediaType.APPLICATION_JSON)
 public class MessageController {
+    public static final String MESSAGE_EXIST = "message %s already exist";
     private VneklasnikiDao<Message> messageDao = new MessageDao(MySqlDBManager.instance());
     private static JsonConverter converter = new JsonConverter();
 
@@ -49,7 +50,7 @@ public class MessageController {
             messageId = messageDao.create(message);
             return Response.ok(messageId).build();
         }
-        return Response.status(400).entity(String.format("message %s already exist", message)).build();
+        return Response.status(400).entity(String.format(MESSAGE_EXIST, message)).build();
     }
 
     @PUT

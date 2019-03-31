@@ -13,5 +13,7 @@ public interface DBManager {
 
     void closeResultSet(ResultSet rs);
 
+    void destroy();
+
     Query getQuery();
 }

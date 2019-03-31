@@ -40,6 +40,7 @@ public class GroupDao implements VneklasnikiDao<Group> {
             throw new DataBaseException("Group isn't added", e);
         } finally {
             dbManager.closePreparedStatement(preparedStatement);
+            dbManager.putConnection(connection);
         }
     }
 
@@ -62,8 +63,9 @@ public class GroupDao implements VneklasnikiDao<Group> {
             logger.log(Level.WARNING, e.getMessage(), e);
             throw new DataBaseException(e);
         } finally {
-            dbManager.closePreparedStatement(preparedStatement);
             dbManager.closeResultSet(resultSet);
+            dbManager.closePreparedStatement(preparedStatement);
+            dbManager.putConnection(connection);
         }
     }
 
@@ -88,7 +90,9 @@ public class GroupDao implements VneklasnikiDao<Group> {
             logger.log(Level.WARNING, e.getMessage(), e);
             throw new DataBaseException(e);
         } finally {
+            dbManager.closeResultSet(resultSet);
             dbManager.closePreparedStatement(preparedStatement);
+            dbManager.putConnection(connection);
         }
     }
 
@@ -113,7 +117,9 @@ public class GroupDao implements VneklasnikiDao<Group> {
             logger.log(Level.WARNING, e.getMessage(), e);
             throw new DataBaseException(e);
         } finally {
+            dbManager.closeResultSet(resultSet);
             dbManager.closePreparedStatement(preparedStatement);
+            dbManager.putConnection(connection);
         }
     }
 
@@ -133,6 +139,7 @@ public class GroupDao implements VneklasnikiDao<Group> {
             throw new DataBaseException(e);
         } finally {
             dbManager.closePreparedStatement(preparedStatement);
+            dbManager.putConnection(connection);
         }
     }
 
@@ -149,6 +156,7 @@ public class GroupDao implements VneklasnikiDao<Group> {
             throw new DataBaseException(e);
         } finally {
             dbManager.closePreparedStatement(preparedStatement);
+            dbManager.putConnection(connection);
         }
     }
 }

@@ -17,6 +17,7 @@ import java.util.List;
 @Path("/present")
 @Produces(MediaType.APPLICATION_JSON)
 public class PresentController {
+    public static final String PRESENT_EXIST = "present %s already exist";
     private static JsonConverter converter = new JsonConverter();
     private VneklasnikiDao<Present> presentDao = new PresentDao(MySqlDBManager.instance());
 
@@ -51,7 +52,7 @@ public class PresentController {
             presentId = presentDao.create(present);
             return Response.ok(presentId).build();
         }
-        return Response.status(400).entity(String.format("present %s already exist", present)).build();
+        return Response.status(400).entity(String.format(PRESENT_EXIST, present)).build();
     }
 
     @PUT

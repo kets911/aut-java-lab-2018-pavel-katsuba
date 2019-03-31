@@ -1,6 +1,0 @@
- private final String GET_ALL_GROUPS_USERS = "select * from (select userGroup.userId, vgroups.id as groupId, userGroup.subscribeDate, vgroups.groupName, vgroups.author, vgroups.creationDate from vgroups inner join userGroup on vgroups.id = userGroup.groupId) as b inner join users on users.id = b.userId";
-    private final String GET_GROUP_USERS = "select * from (select userGroup.userId, vgroups.id as groupId, userGroup.subscribeDate, vgroups.groupName, vgroups.author, vgroups.creationDate from vgroups inner join userGroup on vgroups.id = userGroup.groupId where userGroup.groupId = (?)) as b inner join users on users.id = b.userId";
-    private final String GET_GROUP_USER_ID = "select userGroup.id from userGroup where userGroup.userId = (?) and userGroup.groupId = (?)";
-    private final String ADD_GROUP_USER_RELATE = "insert into userGroup (userId, groupId, subscribeDate) values (?, ?, ?)";
-    private final String UPDATE_GROUP_USER = "update userGroup set userGroup.userId = (?), userGroup.groupId = (?), userGroup.subscribeDate = (?), where userGroup.groupId = (?)";
-    private final String DELETE_GROUP_USER = "delete from userGroup where userGroup.id = (?)";

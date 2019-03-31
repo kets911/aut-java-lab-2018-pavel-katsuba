@@ -24,6 +24,8 @@ import java.util.Map;
 @Path("/group")
 @Produces(MediaType.APPLICATION_JSON)
 public class GroupController {
+    public static final String GROUP_EXIST = "group %s already exist";
+    public static final String RELATE_EXIST = "relate %s already exist";
     private VneklasnikiDao<Group> groupDao = new GroupDao(MySqlDBManager.instance());
     private VneklasnikiDao<GroupUserRelate> userGroupDao = new UserGroupDao(MySqlDBManager.instance());
     private static JsonConverter converter = new JsonConverter();
@@ -46,7 +48,7 @@ public class GroupController {
             groupId = groupDao.create(group);
             return Response.ok(groupId).build();
         }
-        return Response.status(400).entity(String.format("group %s already exist", group)).build();
+        return Response.status(400).entity(String.format(GROUP_EXIST, group)).build();
     }
 
     @POST
@@ -59,7 +61,7 @@ public class GroupController {
             relateId = userGroupDao.create(entity);
             return Response.ok(relateId).build();
         }
-        return Response.status(400).entity(String.format("relate %s already exist", entity)).build();
+        return Response.status(400).entity(String.format(RELATE_EXIST, entity)).build();
     }
 
     @GET

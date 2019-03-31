@@ -3,66 +3,67 @@
 <html>
 <head>
     <script src="script.js"></script>
+    <script>
+        window.onload = function () {
+            let a = document.getElementById('upgrade');
+            a.onclick = function () {
+                let jsonService = {
+                    "name": document.getElementById('serviceLogin').innerText,
+                    "password": document.getElementById('servicePassword').innerText
+                };
+                let json = JSON.stringify(jsonService);
+                request = new XMLHttpRequest();
+                request.open("POST", "http://localhost:8080/task_8_war/api/registration/upgrade");
+                request.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+                request.onreadystatechange = function () {
+                    if (request.readyState === 4 && request.status === 200){
+                        let answer = JSON.parse(request.responseText);
+                        document.getElementById('status').innerText = answer.status;
+                        document.getElementById('requestCount').innerText = answer.requestCount;
+                        // let a = document.getElementById("upgrade");
+                        a.parentNode.removeChild(a);
+                    }
+                };
+                request.send(json);
+            }
+        }
+    </script>
     <title>Vneklasniki</title>
 </head>
 <body>
-<%--<script lang="javaScript">--%>
-    <%--import requst from 'script.js'--%>
-    <%--if (request === null) {--%>
-        <%--request = new XMLHttpRequest();--%>
-        <%--request.open("GET", "http://localhost:8080/task_8_war/start");--%>
-        <%--request.setRequestHeader('Content-type', 'application/json; charset=utf-8');--%>
-        <%--request.onreadystatechange = function () {--%>
-            <%--if (request.readyState === 4 && request.status === 200){--%>
-                <%--document.getElementById("output").innerHTML = "";--%>
-                <%--document.getElementById("output").innerHTML = request.responseText;--%>
-            <%--}--%>
-        <%--};--%>
-        <%--request.send();--%>
-    <%--}--%>
-<%--</script>--%>
 <div class="header">
     User:&nbsp;
     <c:out value="${service.login}" default="Guest"/>&nbsp;
 
-    <c:if test="${request.responseText == null}">
+    <c:if test="${service == null}">
         <a href="javascript:disp(document.getElementById('login'))">Login</a>&nbsp;&nbsp;
-        <a href="javascript:disp(document.getElementById('reg'))">Reg</a>
     </c:if>
-    <c:if test="${request.responseText != null}">
-        <a href="javascript:">logout</a>
+    <c:if test="${service != null}">
+        <form name="logout" id="logout" method="POST" ACTION="<c:url value='/logout'/>">
+            <input type="hidden" name="processType" value="logout">
+            <a href="javascript:logOut()">Logout</a>
+        </form>
     </c:if>
     <hr>
     <br>
 </div>
-<form name="authForm" id="login" method="post" style="display: none;">
-    <label for="name">login</label>&nbsp;&nbsp;
-    <input type="text" name="username" id="name" class="text"/>
+<form name="authForm" id="login" action="<c:url value='/auth'/>" method="post" style="display: none;">
+    <label for="log">login</label>&nbsp;&nbsp;
+    <input type="text" name="login" id="log" class="text"/>
     <label for="password">password</label>&nbsp;&nbsp;
     <input type="password" name="password" id="password" class="text"/>
-    <a href="javascript:login()">submit</a>
+    <input type="submit" value="LogIn"/>
 </form>
-<form name="regForm" id="reg" method="post" style="display: none;">
-    <br>
-    <label> User
-        <input type="checkbox" class="check-box" value="user" title="User">
-    </label>&nbsp;&nbsp;
-    <label> Group
-        <input type="checkbox" class="check-box" value="group" title="Group">
-    </label>&nbsp;&nbsp;
-    <label> Friend
-        <input type="checkbox" class="check-box" value="friend" title="Friend">
-    </label>&nbsp;&nbsp;
-    <label> Message
-        <input type="checkbox" class="check-box" value="message" title="Message">
-    </label>&nbsp;&nbsp;
-    <label> Present
-        <input type="checkbox" class="check-box" value="present" title="Present">
-    </label><br><br><br>
-    <label for="username">login</label>&nbsp;&nbsp;
-    <input type="text" name="username" id="username" class="text"/>
-    <a href="javascript:reg()">submit</a>
-</form>
-<div id="output"><div id="json"></div> </div>
+<c:if test="${service != null}">
+    <i>login:</i>&nbsp;<i id="serviceLogin">${service.login}</i><br>
+    <i>password:</i>&nbsp;<i id="servicePassword">${service.password}</i><br>
+    <i>Status:</i>&nbsp;<i id="status">${service.status}</i><br>
+    <i>RequestCount:</i>&nbsp;<i id="requestCount">${service.requestCount}</i><br>
+    <i>Token:</i>&nbsp;<i>${token}</i><br>
+    <c:if test="${service.status eq 'Standard'}">
+        <a href="#" id="upgrade">upgrade</a>
+    </c:if>
+</c:if>
+<c:out value="${errorMessage}"/>
 </body>
 </html>

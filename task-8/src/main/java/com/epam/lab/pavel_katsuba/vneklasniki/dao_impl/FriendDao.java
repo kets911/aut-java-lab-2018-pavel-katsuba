@@ -41,6 +41,7 @@ public class FriendDao implements VneklasnikiDao<Friend> {
             throw new DataBaseException("Friend isn't added", e);
         } finally {
             dbManager.closePreparedStatement(preparedStatement);
+            dbManager.putConnection(connection);
         }
     }
 
@@ -62,8 +63,9 @@ public class FriendDao implements VneklasnikiDao<Friend> {
             logger.log(Level.WARNING, e.getMessage(), e);
             throw new DataBaseException(e);
         } finally {
-            dbManager.closePreparedStatement(preparedStatement);
             dbManager.closeResultSet(resultSet);
+            dbManager.closePreparedStatement(preparedStatement);
+            dbManager.putConnection(connection);
         }
     }
 
@@ -86,8 +88,9 @@ public class FriendDao implements VneklasnikiDao<Friend> {
             logger.log(Level.WARNING, e.getMessage(), e);
             throw new DataBaseException(e);
         } finally {
-            dbManager.closePreparedStatement(preparedStatement);
             dbManager.closeResultSet(resultSet);
+            dbManager.closePreparedStatement(preparedStatement);
+            dbManager.putConnection(connection);
         }
     }
 
@@ -108,8 +111,9 @@ public class FriendDao implements VneklasnikiDao<Friend> {
             logger.log(Level.WARNING, e.getMessage(), e);
             throw new DataBaseException(e);
         } finally {
-            dbManager.closePreparedStatement(preparedStatement);
             dbManager.closeResultSet(resultSet);
+            dbManager.closePreparedStatement(preparedStatement);
+            dbManager.putConnection(connection);
         }
     }
 
@@ -146,6 +150,7 @@ public class FriendDao implements VneklasnikiDao<Friend> {
             throw new DataBaseException(e);
         } finally {
             dbManager.closePreparedStatement(preparedStatement);
+            dbManager.putConnection(connection);
         }
     }
 
@@ -162,6 +167,7 @@ public class FriendDao implements VneklasnikiDao<Friend> {
             throw new DataBaseException(e);
         } finally {
             dbManager.closePreparedStatement(preparedStatement);
+            dbManager.putConnection(connection);
         }
     }
 }

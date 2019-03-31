@@ -18,6 +18,8 @@ import java.util.logging.Logger;
 
 public class AccessDao implements VneklasnikiDao<String> {
     private static final Logger logger = Logger.getLogger(AccessDao.class.getSimpleName());
+    public static final String ACCESS_ISN_T_ADDED = "Access isn't added";
+    public static final String ID = "id";
     private final DBManager dbManager;
 
     public AccessDao(DBManager dbManager) {
@@ -34,12 +36,13 @@ public class AccessDao implements VneklasnikiDao<String> {
             if (preparedStatement.executeUpdate() > 0) {
                 return getEntityId(entity);
             }
-            throw new DataBaseException("Access isn't added");
+            throw new DataBaseException(ACCESS_ISN_T_ADDED);
         } catch (SQLException e) {
             logger.log(Level.WARNING, e.getMessage(), e);
             throw new DataBaseException(e);
         } finally {
             dbManager.closePreparedStatement(preparedStatement);
+            dbManager.putConnection(connection);
         }
     }
 
@@ -53,15 +56,16 @@ public class AccessDao implements VneklasnikiDao<String> {
             preparedStatement.setString(1, entity);
             resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
-                return resultSet.getInt("id");
+                return resultSet.getInt(ID);
             }
             return Constants.NAN_ID;
         } catch (SQLException e) {
             logger.log(Level.WARNING, e.getMessage(), e);
             throw new DataBaseException(e);
         } finally {
-            dbManager.closePreparedStatement(preparedStatement);
             dbManager.closeResultSet(resultSet);
+            dbManager.closePreparedStatement(preparedStatement);
+            dbManager.putConnection(connection);
         }
     }
 
@@ -82,8 +86,9 @@ public class AccessDao implements VneklasnikiDao<String> {
             logger.log(Level.WARNING, e.getMessage(), e);
             throw new DataBaseException(e);
         } finally {
-            dbManager.closePreparedStatement(preparedStatement);
             dbManager.closeResultSet(resultSet);
+            dbManager.closePreparedStatement(preparedStatement);
+            dbManager.putConnection(connection);
         }
     }
 
@@ -104,8 +109,9 @@ public class AccessDao implements VneklasnikiDao<String> {
             logger.log(Level.WARNING, e.getMessage(), e);
             throw new DataBaseException(e);
         } finally {
-            dbManager.closePreparedStatement(preparedStatement);
             dbManager.closeResultSet(resultSet);
+            dbManager.closePreparedStatement(preparedStatement);
+            dbManager.putConnection(connection);
         }
     }
 
@@ -123,6 +129,7 @@ public class AccessDao implements VneklasnikiDao<String> {
             throw new DataBaseException(e);
         } finally {
             dbManager.closePreparedStatement(preparedStatement);
+            dbManager.putConnection(connection);
         }
     }
 
@@ -139,6 +146,7 @@ public class AccessDao implements VneklasnikiDao<String> {
             throw new DataBaseException(e);
         } finally {
             dbManager.closePreparedStatement(preparedStatement);
+            dbManager.putConnection(connection);
         }
     }
 }

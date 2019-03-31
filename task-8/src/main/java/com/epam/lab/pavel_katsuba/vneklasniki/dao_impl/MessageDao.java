@@ -41,6 +41,7 @@ public class MessageDao implements VneklasnikiDao<Message> {
             throw new DataBaseException("Message isn't added", e);
         } finally {
             dbManager.closePreparedStatement(preparedStatement);
+            dbManager.putConnection(connection);
         }
     }
 
@@ -66,6 +67,7 @@ public class MessageDao implements VneklasnikiDao<Message> {
         } finally {
             dbManager.closeResultSet(resultSet);
             dbManager.closePreparedStatement(preparedStatement);
+            dbManager.putConnection(connection);
         }
     }
 
@@ -93,6 +95,7 @@ public class MessageDao implements VneklasnikiDao<Message> {
         } finally {
             dbManager.closeResultSet(resultSet);
             dbManager.closePreparedStatement(preparedStatement);
+            dbManager.putConnection(connection);
         }
     }
 
@@ -120,6 +123,7 @@ public class MessageDao implements VneklasnikiDao<Message> {
         } finally {
             dbManager.closeResultSet(resultSet);
             dbManager.closePreparedStatement(preparedStatement);
+            dbManager.putConnection(connection);
         }
     }
 
@@ -140,6 +144,7 @@ public class MessageDao implements VneklasnikiDao<Message> {
             throw new DataBaseException(e);
         } finally {
             dbManager.closePreparedStatement(preparedStatement);
+            dbManager.putConnection(connection);
         }
     }
 
@@ -156,6 +161,7 @@ public class MessageDao implements VneklasnikiDao<Message> {
             throw new DataBaseException(e);
         } finally {
             dbManager.closePreparedStatement(preparedStatement);
+            dbManager.putConnection(connection);
         }
     }
 }

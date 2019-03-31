@@ -43,6 +43,7 @@ public class ServiceDao implements VneklasnikiDao<Service> {
             throw new DataBaseException(e);
         } finally {
             dbManager.closePreparedStatement(preparedStatement);
+            dbManager.putConnection(connection);
         }
     }
 
@@ -63,8 +64,9 @@ public class ServiceDao implements VneklasnikiDao<Service> {
             logger.log(Level.WARNING, e.getMessage(), e);
             throw new DataBaseException(e);
         } finally {
-            dbManager.closePreparedStatement(preparedStatement);
             dbManager.closeResultSet(resultSet);
+            dbManager.closePreparedStatement(preparedStatement);
+            dbManager.putConnection(connection);
         }
     }
 
@@ -89,8 +91,9 @@ public class ServiceDao implements VneklasnikiDao<Service> {
             logger.log(Level.WARNING, e.getMessage(), e);
             throw new DataBaseException(e);
         } finally {
-            dbManager.closePreparedStatement(preparedStatement);
             dbManager.closeResultSet(resultSet);
+            dbManager.closePreparedStatement(preparedStatement);
+            dbManager.putConnection(connection);
         }
     }
 
@@ -115,8 +118,9 @@ public class ServiceDao implements VneklasnikiDao<Service> {
             logger.log(Level.WARNING, e.getMessage(), e);
             throw new DataBaseException(e);
         } finally {
-            dbManager.closePreparedStatement(preparedStatement);
             dbManager.closeResultSet(resultSet);
+            dbManager.closePreparedStatement(preparedStatement);
+            dbManager.putConnection(connection);
         }
     }
 
@@ -128,13 +132,16 @@ public class ServiceDao implements VneklasnikiDao<Service> {
             preparedStatement = connection.prepareStatement(SqlQuery.UPDATE_SERVICE);
             preparedStatement.setString(1, entity.getLogin());
             preparedStatement.setString(2, entity.getPassword());
-            preparedStatement.setInt(3, oldEntityId);
+            preparedStatement.setString(3, entity.getStatus());
+            preparedStatement.setInt(4, entity.getRequestCount());
+            preparedStatement.setInt(5, oldEntityId);
             return preparedStatement.executeUpdate() > 0;
         } catch (SQLException e) {
             logger.log(Level.WARNING, e.getMessage(), e);
             throw new DataBaseException(e);
         } finally {
             dbManager.closePreparedStatement(preparedStatement);
+            dbManager.putConnection(connection);
         }
     }
 
@@ -151,6 +158,7 @@ public class ServiceDao implements VneklasnikiDao<Service> {
             throw new DataBaseException(e);
         } finally {
             dbManager.closePreparedStatement(preparedStatement);
+            dbManager.putConnection(connection);
         }
     }
 }
