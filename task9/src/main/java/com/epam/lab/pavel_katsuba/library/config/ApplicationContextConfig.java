@@ -10,7 +10,7 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
 @Configuration
 @EnableWebMvc
 @ComponentScan("com.epam.lab.pavel_katsuba.library")
-public class WebConfig {
+public class ApplicationContextConfig {
 
     @Bean
     public ViewResolver viewResolver() {

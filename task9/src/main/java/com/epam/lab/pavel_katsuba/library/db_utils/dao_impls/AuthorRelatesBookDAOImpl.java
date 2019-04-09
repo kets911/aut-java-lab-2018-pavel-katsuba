@@ -32,7 +32,7 @@ public class AuthorRelatesBookDAOImpl implements RelatesBookDao<Author> {
 
     @Override
     public void addEntities(List<Author> entities, int bookId) {
-        jdbcTemplate.batchUpdate(DaoConstants.SELECT_AUTHORS_FOR_BOOK, new BatchPreparedStatementSetter() {
+        jdbcTemplate.batchUpdate(DaoConstants.INSERT_AUTHOR_RELATE, new BatchPreparedStatementSetter() {
 
             @Override
             public void setValues(PreparedStatement ps, int i) throws SQLException {
