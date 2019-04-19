@@ -1,6 +1,5 @@
 package com.epam.lab.pavel_katsuba.library.db_utils.dao_impls;
 
-import com.epam.lab.pavel_katsuba.library.Beans.Author;
 import com.epam.lab.pavel_katsuba.library.Beans.Book;
 import com.epam.lab.pavel_katsuba.library.db_utils.DaoConstants;
 import com.epam.lab.pavel_katsuba.library.interfaces.CrudDao;
@@ -16,7 +15,14 @@ import java.util.List;
 @Repository
 public class BookImpl implements CrudDao<Book> {
     private JdbcTemplate jdbcTemplate;
-    private RowMapper<Book> ROW_MAPPER = (ResultSet resultSet, int rowNum) -> new Book(resultSet.getInt("idBook"), resultSet.getString("bookName"), resultSet.getDate("publishingDate"), resultSet.getBoolean("isTaken"));
+    private RowMapper<Book> ROW_MAPPER = (ResultSet resultSet, int rowNum) ->
+            Book.builder()
+                    .id(resultSet.getInt("idBook"))
+                    .nameBook(resultSet.getString("bookName"))
+                    .count(resultSet.getInt("count"))
+                    .publishingDate(resultSet.getDate("publishingDate"))
+                    .isTaken(resultSet.getBoolean("isTaken"))
+                    .build();
 
     @Autowired
     public BookImpl(DataSource dataSource) {
@@ -25,7 +31,7 @@ public class BookImpl implements CrudDao<Book> {
 
     @Override
     public void addEntity(Book entity) {
-        jdbcTemplate.update(DaoConstants.INSERT_BOOK, entity.getNameBook(), entity.getPublishingDate(), entity.isTaken());
+        jdbcTemplate.update(DaoConstants.INSERT_BOOK, entity.getNameBook(), entity.getPublishingDate(), entity.getCount(), entity.isTaken());
     }
 
     @Override
@@ -35,24 +41,29 @@ public class BookImpl implements CrudDao<Book> {
 
     @Override
     public Book getEntity(int id) {
-        return jdbcTemplate.queryForObject(DaoConstants.SELECT_BOOK_BY_ID, new Object[] {id}, ROW_MAPPER);
+        return jdbcTemplate.queryForObject(DaoConstants.SELECT_BOOK_BY_ID, new Object[]{id}, ROW_MAPPER);
     }
 
     @Override
     public Book getEntity(String name) {
-        return jdbcTemplate.queryForObject(DaoConstants.SELECT_BOOK_BY_NAME, new Object[] {name}, ROW_MAPPER);
+        return jdbcTemplate.queryForObject(DaoConstants.SELECT_BOOK_BY_NAME, new Object[]{name}, ROW_MAPPER);
     }
 
     @Override
     public Book putEntity(Book entity, int oldId) {
         Book oldEntity = getEntity(oldId);
-//        updateCount what is it. What profit
-        int updateCount = jdbcTemplate.update(DaoConstants.UPDATE_BOOK, entity.getNameBook(), entity.getPublishingDate(), entity.isTaken(), oldId);
+        jdbcTemplate.update(DaoConstants.UPDATE_BOOK, entity.getNameBook(), entity.getPublishingDate(), entity.getCount(), entity.isTaken(), oldId);
         return oldEntity;
     }
 
     @Override
     public void deleteEntity(int entityId) {
         jdbcTemplate.update(DaoConstants.DELETE_BOOK, entityId);
+    }
+
+    @Override
+    public boolean isExist(String name) {
+        Integer count = jdbcTemplate.queryForObject(DaoConstants.BOOK_IS_EXIST, new Object[]{name}, Integer.class);
+        return count > 0;
     }
 }

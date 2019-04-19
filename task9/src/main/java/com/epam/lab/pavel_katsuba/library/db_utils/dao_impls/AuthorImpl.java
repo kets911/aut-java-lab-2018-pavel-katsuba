@@ -34,12 +34,12 @@ public class AuthorImpl implements CrudDao<Author> {
 
     @Override
     public Author getEntity(int id) {
-        return jdbcTemplate.queryForObject(DaoConstants.SELECT_AUTHOR_BY_ID, new Object[] {id}, ROW_MAPPER);
+        return jdbcTemplate.queryForObject(DaoConstants.SELECT_AUTHOR_BY_ID, new Object[]{id}, ROW_MAPPER);
     }
 
     @Override
     public Author getEntity(String name) {
-        return jdbcTemplate.queryForObject(DaoConstants.SELECT_AUTHOR_BY_NAME, new Object[] {name}, ROW_MAPPER);
+        return jdbcTemplate.queryForObject(DaoConstants.SELECT_AUTHOR_BY_NAME, new Object[]{name}, ROW_MAPPER);
     }
 
     @Override
@@ -52,5 +52,11 @@ public class AuthorImpl implements CrudDao<Author> {
     @Override
     public void deleteEntity(int entityId) {
         jdbcTemplate.update(DaoConstants.DELETE_AUTHOR, entityId);
+    }
+
+    @Override
+    public boolean isExist(String name) {
+        Integer count = jdbcTemplate.queryForObject(DaoConstants.AUTHOR_IS_EXIST, new Object[]{name}, Integer.class);
+        return count > 0;
     }
 }

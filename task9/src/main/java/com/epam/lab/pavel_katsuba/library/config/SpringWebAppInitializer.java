@@ -3,7 +3,6 @@ package com.epam.lab.pavel_katsuba.library.config;
 import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 import org.springframework.web.servlet.DispatcherServlet;
-import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -23,26 +22,3 @@ public class SpringWebAppInitializer implements WebApplicationInitializer {
     }
 
 }
-//public class SpringWebAppInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
-//    @Override
-//    protected Class<?>[] getRootConfigClasses() {
-//        return new Class<?>[]{
-//                ApplicationContextConfig.class
-//        };
-//
-//    }
-//
-//    @Override
-//    protected Class<?>[] getServletConfigClasses() {
-//        return new Class<?>[]{
-//                ApplicationContextConfig.class,
-//                JdbcConfig.class
-//        };
-//
-//    }
-//
-//    @Override
-//    protected String[] getServletMappings() {
-//        return new String[]{"/"};
-//    }
-//}

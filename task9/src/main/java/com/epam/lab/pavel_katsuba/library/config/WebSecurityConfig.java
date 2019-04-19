@@ -1,18 +1,14 @@
 package com.epam.lab.pavel_katsuba.library.config;
 
-        import com.epam.lab.pavel_katsuba.library.db_utils.ReaderService;
-        import org.springframework.beans.factory.annotation.Autowired;
-        import org.springframework.context.annotation.Bean;
-        import org.springframework.context.annotation.ComponentScan;
-        import org.springframework.context.annotation.Configuration;
-        import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-        import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-        import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-        import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-        import org.springframework.security.core.userdetails.User;
-        import org.springframework.security.core.userdetails.UserDetails;
-        import org.springframework.security.core.userdetails.UserDetailsService;
-        import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import com.epam.lab.pavel_katsuba.library.Beans.Role;
+import com.epam.lab.pavel_katsuba.library.db_utils.ReaderServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 
 @Configuration
 @EnableWebSecurity
@@ -20,20 +16,20 @@ package com.epam.lab.pavel_katsuba.library.config;
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
-    private ReaderService readerService;
+    private ReaderServiceImpl readerService;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests().antMatchers("/", "/start", "/login", "/registration").permitAll()
-                .anyRequest().authenticated()
                 .and()
-                .authorizeRequests().and().formLogin()
-//                .loginProcessingUrl("/j_spring_security_check") // Submit URL
+                .authorizeRequests()
+                .antMatchers("/account").hasAuthority(Role.USER.name())
+                .antMatchers("/admin/**").hasAuthority(Role.ADMIN.name())
+                .and().formLogin()
                 .loginPage("/login")
                 .defaultSuccessUrl("/start")
                 .failureUrl("/login?error=true")
-//                .failureHandler()
                 .usernameParameter("username")
                 .passwordParameter("password")
                 .and().logout().logoutSuccessUrl("/").permitAll()

@@ -19,8 +19,14 @@ import java.util.List;
 @Repository
 public class ReadersBookImpl implements RelatesDao<Reader, Book> {
     private JdbcTemplate jdbcTemplate;
-    private RowMapper<Book> BOOK_ROW_MAPPER = (ResultSet resultSet, int rowNum) -> new Book(resultSet.getInt("idBook"), resultSet.getString("bookName"), resultSet.getDate("publishingDate"), resultSet.getBoolean("isTaken"));
-    private RowMapper<Reader> READER_ROW_MAPPER = (ResultSet resultSet, int rowNum) -> Reader.builder().id(resultSet.getInt("idReader")).username(resultSet.getString("readerName")).password(resultSet.getString("passw")).build();
+    private RowMapper<Book> BOOK_ROW_MAPPER = (ResultSet resultSet, int rowNum) ->
+            Book.builder()
+                    .id(resultSet.getInt("idBook"))
+                    .nameBook(resultSet.getString("bookName"))
+                    .count(resultSet.getInt("count"))
+                    .publishingDate(resultSet.getDate("publishingDate"))
+                    .isTaken(resultSet.getBoolean("isTaken"))
+                    .build();
 
     @Autowired
     public ReadersBookImpl(DataSource dataSource) {
@@ -29,18 +35,8 @@ public class ReadersBookImpl implements RelatesDao<Reader, Book> {
 
 
     @Override
-    public List<Reader> getEntities(int beanId) {
-        return null;
-    }
-
-    @Override
     public List<Book> getBeans(int readerId) {
-        return jdbcTemplate.query(DaoConstants.SELECT_BOOKS_FOR_READER, new Object[] {readerId}, BOOK_ROW_MAPPER);
-    }
-
-    @Override
-    public void addEntities(List<Reader> entities, int beanId) {
-
+        return jdbcTemplate.query(DaoConstants.SELECT_BOOKS_FOR_READER, new Object[]{readerId}, BOOK_ROW_MAPPER);
     }
 
     @Override
@@ -62,27 +58,23 @@ public class ReadersBookImpl implements RelatesDao<Reader, Book> {
     }
 
     @Override
-    public void putEntities(int beanId, int oldEntityId, int newEntityId) {
-
+    public void putBeans(int readerId, int oldBookId, int newBookId) {
+        jdbcTemplate.update(DaoConstants.UPDATE_BOOK_FOR_READER, newBookId, readerId, oldBookId);
     }
 
     @Override
-    public void putBeans(int entityId, int oldBeanId, int newBeanId) {
-
-    }
-
-    @Override
-    public void deleteEntityRelates(int beanId) {
-
-    }
-
-    @Override
-    public void deleteBeanRelates(int entityId) {
-
+    public void deleteBeanRelates(int readerId) {
+        jdbcTemplate.update(DaoConstants.DELETE_BOOK_FOR_READER_BY_ID, readerId);
     }
 
     @Override
     public void delete(int entityId, int beanId) {
         jdbcTemplate.update(DaoConstants.DELETE_BOOK_FOR_READER, entityId, beanId);
+    }
+
+    @Override
+    public boolean relateIsExist(int entityId, int beanId) {
+        Integer count = jdbcTemplate.queryForObject(DaoConstants.IS_EXIST_BOOK_FOR_READER, new Object[]{entityId, beanId}, Integer.class);
+        return count > 0;
     }
 }

@@ -1,0 +1,10 @@
+<div th:fragment="header">
+    <h3 th:if="${reader != null}" th:text="'User: ' + ${reader.username}"></h3>
+    <a th:if="${reader == null}" href="#" th:href="@{/login}">auth</a>
+    <div th:if="${reader != null}">
+        <form name="logout" method="POST" ACTION="logout">
+            <input type="hidden" name="processType" value="">
+            <a href="javascript:document.logout.submit()">Logout</a>
+        </form>
+    </div>
+</div>

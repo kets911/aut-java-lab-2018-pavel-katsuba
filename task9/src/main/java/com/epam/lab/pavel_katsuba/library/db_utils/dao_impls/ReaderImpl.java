@@ -64,4 +64,10 @@ public class ReaderImpl implements CrudDao<Reader> {
     public void deleteEntity(int entityId) {
         jdbcTemplate.update(DaoConstants.DELETE_READER, entityId);
     }
+
+    @Override
+    public boolean isExist(String name) {
+        Integer count = jdbcTemplate.queryForObject(DaoConstants.READER_IS_EXIST, new Object[]{name}, Integer.class);
+        return count > 0;
+    }
 }

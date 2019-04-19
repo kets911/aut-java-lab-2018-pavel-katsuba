@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <meta charset="UTF-8">
+    <title>Reader card</title>
+</head>
+<body>
+<div class="text-center" th:insert="header :: header">...</div>
+<form th:if="${reader != null}" name="toStart" method="POST" th:action="@{/start}">
+    <input type="hidden" name="processType" value="">
+    <a href="javascript:document.toStart.submit()">Main</a>
+</form>
+<hr>
+<br>
+<form name="returnBook" id="returnBook" action="#" th:action="@{/returnBook}" method="post">
+    <table>
+        <tr>
+            <th>NAME</th>
+            <th>Choose</th>
+        </tr>
+        <tr th:each="book : ${books}">
+            <td th:text="${book.nameBook}" th:onclick="|bookInfo('${book.id}')|"></td>
+            <td>
+                <input name="returnCheckbox" type="checkbox" th:value="${book.id}"/>
+            </td>
+        </tr>
+    </table>
+    <a href="#" onclick="document.returnBook.submit()">Return Books</a>
+</form>
+<script th:inline="javascript">
+    function bookInfo(id) {
+        var books = [[${books}]];
+        var book = books[0];
+        for (var i = 0; i < books.length; i++) {
+            if (books[i].id == id) {
+                book = books[i];
+            }
+        }
+        var authors = "";
+        book.authors.forEach(author => authors += author.authorName + "\n");
+        var genres = "";
+        book.genres.forEach(genre => genres += genre.genreName + "\n");
+        var table = document.createElement("table");
+        var headTr = document.createElement("tr");
+        var nameTh = document.createElement("th");
+        var dateTh = document.createElement("th");
+        var authorsTh = document.createElement("th");
+        var genresTh = document.createElement("th");
+        var nameTd = document.createElement("td");
+        var dateTd = document.createElement("td");
+        var authorsTd = document.createElement("td");
+        var genresTd = document.createElement("td");
+        nameTh.innerText = "Name";
+        dateTh.innerText = "Date";
+        authorsTh.innerText = "Authors";
+        genresTh.innerText = "Genres";
+        headTr.appendChild(nameTh);
+        headTr.appendChild(dateTh);
+        headTr.appendChild(authorsTh);
+        headTr.appendChild(genresTh);
+        table.appendChild(headTr);
+        nameTd.innerText = book.nameBook;
+        dateTd.innerText = book.publishingDate.toString().slice(0, 10);
+        authorsTd.innerText = authors;
+        genresTd.innerText = genres;
+        table.appendChild(nameTd);
+        table.appendChild(dateTd);
+        table.appendChild(authorsTd);
+        table.appendChild(genresTd);
+        swal(table);
+    }
+</script>
+</body>
+</html>

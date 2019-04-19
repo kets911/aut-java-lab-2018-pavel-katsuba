@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin</title>
+</head>
+<body>
+<div class="text-center" th:insert="header :: header">...</div>
+<hr>
+<br>
+<form name="admReaders" method="POST" th:action="@{/admin/readers}">
+    <input type="hidden" name="processType" value="">
+    <a href="javascript:document.admReaders.submit()">Readers</a>
+</form>
+<form name="admBooks" method="POST" th:action="@{/book/getBooks}">
+    <input type="hidden" name="processType" value="">
+    <a href="javascript:document.admBooks.submit()">Books</a>
+</form>
+</body>
+</html>

@@ -53,4 +53,10 @@ public class GenreImpl implements CrudDao<Genre> {
     public void deleteEntity(int entityId) {
         jdbcTemplate.update(DaoConstants.DELETE_GENRE, entityId);
     }
+
+    @Override
+    public boolean isExist(String name) {
+        Integer count = jdbcTemplate.queryForObject(DaoConstants.GENRE_IS_EXIST, new Object[]{name}, Integer.class);
+        return count > 0;
+    }
 }

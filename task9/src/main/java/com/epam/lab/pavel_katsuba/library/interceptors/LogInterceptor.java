@@ -11,9 +11,9 @@ import javax.servlet.http.HttpServletResponse;
 
 public class LogInterceptor extends HandlerInterceptorAdapter {
     private static Logger log = LogManager.getLogger(LogInterceptor.class.getSimpleName());
+
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
-            throws Exception {
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
         log.info("Request URL: " + request.getRequestURL());
         log.info("Start Time: " + System.currentTimeMillis());
         log.info("Principal: " + SecurityContextHolder.getContext().getAuthentication().getPrincipal());
@@ -28,8 +28,7 @@ public class LogInterceptor extends HandlerInterceptorAdapter {
     }
 
     @Override
-    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex)
-            throws Exception {
+    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) {
         log.info("Request URL: " + request.getRequestURL());
         log.info("End Time: " + System.currentTimeMillis());
         log.info("Principal: " + SecurityContextHolder.getContext().getAuthentication().getCredentials());

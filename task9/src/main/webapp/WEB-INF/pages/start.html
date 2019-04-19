@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <meta charset="UTF-8">
+    <title>Library</title>
+    <script th:inline="javascript">
+        function bookInfo(id) {
+            var books = [[${books}]];
+            var book = books[0];
+            for (var i = 0; i < books.length; i++) {
+                if (books[i].id == id) {
+                    book = books[i];
+                }
+            }
+            var authors = "";
+            book.authors.forEach(author => authors += author.authorName + "\n");
+            var genres = "";
+            book.genres.forEach(genre => genres += genre.genreName + "\n");
+            var table = document.createElement("table");
+            var headTr = document.createElement("tr");
+            var nameTh = document.createElement("th");
+            var dateTh = document.createElement("th");
+            var authorsTh = document.createElement("th");
+            var genresTh = document.createElement("th");
+            var nameTd = document.createElement("td");
+            var dateTd = document.createElement("td");
+            var authorsTd = document.createElement("td");
+            var genresTd = document.createElement("td");
+            nameTh.innerText = "Name";
+            dateTh.innerText = "Date";
+            authorsTh.innerText = "Authors";
+            genresTh.innerText = "Genres";
+            headTr.appendChild(nameTh);
+            headTr.appendChild(dateTh);
+            headTr.appendChild(authorsTh);
+            headTr.appendChild(genresTh);
+            table.appendChild(headTr);
+            nameTd.innerText = book.nameBook;
+            dateTd.innerText = book.publishingDate.toString().slice(0, 10);
+            authorsTd.innerText = authors;
+            genresTd.innerText = genres;
+            table.appendChild(nameTd);
+            table.appendChild(dateTd);
+            table.appendChild(authorsTd);
+            table.appendChild(genresTd);
+            swal(table);
+        }
+    </script>
+</head>
+<body>
+<div class="text-center" th:insert="header :: header">...</div>
+<form th:if="${reader != null && reader.username != 'admin'}" name="account" method="POST" ACTION="account">
+    <input type="hidden" name="processType" value="">
+    <a href="javascript:document.account.submit()">account</a>
+</form>
+<br>
+<form name="chooseBooks" action="#" th:action="@{/takeBooks}" th:object="${reader}" method="post">
+    <table>
+        <tr>
+            <th>NAME</th>
+            <th>Count</th>
+            <th>State</th>
+        </tr>
+        <tr th:each="book : ${books}">
+            <td th:text="${book.nameBook}" th:onclick="|bookInfo('${book.id}')|"></td>
+            <td th:text="${book.count}"></td>
+            <td th:if="${book.count > 0}">
+                <input name="bookCheckbox" type="checkbox" th:value="${book.id}"/>
+            </td>
+        </tr>
+    </table>
+    <a th:if="${reader != null && reader.username != 'admin'}" href="#" onclick="document.chooseBooks.submit()">Take</a>
+</form>
+</body>
+</html>
