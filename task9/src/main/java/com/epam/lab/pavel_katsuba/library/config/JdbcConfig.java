@@ -25,7 +25,6 @@ public class JdbcConfig {
     @Bean
     public DataSource mysqlDataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
-        System.out.println(driver);
         dataSource.setDriverClassName(driver);
         dataSource.setUrl(url);
         dataSource.setUsername(login);
