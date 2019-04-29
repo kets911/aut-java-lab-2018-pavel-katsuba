@@ -1,0 +1,21 @@
+version: '3'
+
+services:
+  mysql:
+    image: mysql:5.5
+    container_name: mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    volumes:
+      - ./resources/db:/docker-entrypoint-initdb.d
+    ports:
+      - "3306:3306"
+
+  tomcat:
+    image: tomcat:9.0.13
+    container_name: tomcat
+    volumes:
+      - ./resources/Network.war:/usr/local/tomcat/webapps/Network.war
+    ports:
+      - "8080:8080"
