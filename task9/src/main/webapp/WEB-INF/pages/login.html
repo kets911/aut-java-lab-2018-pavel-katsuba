@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Auth</title>
+    <script lang="javascript">
+        function disp(form) {
+            if (form.id === "authorization") {
+                document.getElementById('registration').style.display = "none";
+                document.getElementById('loginHref').style.display = "none";
+                document.getElementById('regHref').style.display = "block";
+            } else {
+                document.getElementById('authorization').style.display = "none";
+                document.getElementById('loginHref').style.display = "block";
+                document.getElementById('regHref').style.display = "none";
+            }
+            form.style.display = "block";
+        }
+    </script>
+</head>
+<body>
+<div class="header">
+    <h2 th:if="${reader != null}" th:text="'User: ' + ${reader.username}"></h2>&nbsp;
+    <div th:if="${reader == null}">
+        <a id="loginHref" href="javascript:disp(document.getElementById('authorization'))"
+           style="display: none">Login</a>&nbsp;&nbsp;
+        <a id="regHref" href="javascript:disp(document.getElementById('registration'))">Registration</a>
+    </div>
+    <div th:if="${reader != null}">
+        <form name="logout" method="POST" th:action="@{/logout}">
+            <input type="hidden" name="processType" value="">
+            <a href="javascript:document.logout.submit()">Logout</a>
+        </form>
+        <form name="account" method="POST" th:action="@{/account}">
+            <input type="hidden" name="processType" value="">
+            <a href="javascript:document.account.submit()">account</a>
+        </form>
+    </div>
+</div>
+<br>
+
+<div th:if="${param.error}">
+    Invalid username or password.
+</div>
+<form id="authorization" th:action="@{/login}" method="post" style="display: block;">
+    <div><label> User Name : <input type="text" name="username"/> </label></div>
+    <div><label> Password: <input type="password" name="password"/> </label></div>
+    <div><input type="submit" value="Sign In"/></div>
+</form>
+<form id="registration" th:action="@{/registration}" method="post" style="display: none;">
+    <div><label> User Name : <input type="text" name="username"/> </label></div>
+    <div><label> Password: <input type="password" name="password"/> </label></div>
+    <div><input type="submit" value="Reg"/></div>
+</form>
+</body>
+
+</html>

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Book Admin</title>
+    <script>
+        function disp(form) {
+            document.forms['addBook'].style.display = "none";
+            document.forms['changeBook'].style.display = "none";
+            document.forms['deleteBook'].style.display = "none";
+            form.style.display = "block";
+        }
+    </script>
+</head>
+<body>
+<form name="admin" method="POST" th:action="@{/admin}">
+    <input type="hidden" name="processType" value="">
+    <a href="javascript:document.admin.submit()">admin</a>
+</form>
+<a href="#" onclick="disp(document.addBook)">addBook</a>
+<a href="#" onclick="disp(document.changeBook)">changeBook</a>
+<a href="#" onclick="disp(document.deleteBook)">deleteBook</a>
+<hr>
+<br>
+<form name="addBook" method="POST" th:action="@{/book/addBook}">
+    <h3>Add Book Form</h3>
+    <div><label> Book Name : <input type="text" name="nameBook"/></label></div>
+    <div><label> Date : <input type="text" name="publishingDate"/> </label></div>
+    <div><label> Book Authors : <input type="text" name="authors"/></label></div>
+    <div><label> Book Genres : <input type="text" name="genres"/></label></div>
+    <div><label> Count : <input type="text" name="count"/></label></div>
+    <a href="javascript:document.addBook.submit()">addBook</a>
+</form>
+
+<form name="changeBook" method="POST" th:action="@{/book/changeBook}" style="display: none">
+    <h3>Change Book Form</h3>
+    <div><label id="bookName"> Book Name : <input type="text" name="nameBook"/></label></div>
+    <div><label id="bookDate"> Date : <input type="text" name="publishingDate"/> </label></div>
+    <div><label id="bookAuthors"> Book Authors : <input type="text" name="authors"/></label></div>
+    <div><label id="bookGenres"> Book Genres : <input type="text" name="genres"/></label></div>
+    <div><label id="bookCount"> Count : <input type="text" name="count"/></label></div>
+    <div><label id="bookOldId"> OldId : <input type="number" name="oldId"/></label></div>
+    <a href="javascript:document.changeBook.submit()">changeBook</a>
+</form>
+
+<form name="deleteBook" method="POST" th:action="@{/book/deleteBook}" style="display: none">
+    <h3>Delete Book Form</h3>
+    <div><label> BookId : <input type="number" name="bookId"/></label></div>
+    <a href="javascript:document.deleteBook.submit()">deleteBook</a>
+</form>
+<br>
+
+<table>
+    <tr>
+        <th>ID</th>
+        <th>NAME</th>
+        <th>Date</th>
+        <th>Authors</th>
+        <th>Genres</th>
+        <th>Count</th>
+    </tr>
+    <tr th:each="book : ${books}">
+        <td th:text="${book.id}"></td>
+        <td th:text="${book.nameBook}" th:onclick="|change('${book.id}')|"></td>
+        <td th:text="${book.publishingDate}"></td>
+        <td th:text="${book.authors}"></td>
+        <td th:text="${book.genres}"></td>
+        <td th:text="${book.count}"></td>
+    </tr>
+</table>
+</body>
+</html>

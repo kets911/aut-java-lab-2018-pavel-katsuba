@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Reader Admin</title>
+    <script>
+        function disp(form) {
+            document.readerBan.style.display = "none";
+            document.readerDelete.style.display = "none";
+            form.style.display = "block";
+        }
+    </script>
+</head>
+<body>
+<form name="admin" method="POST" th:action="@{/admin}">
+    <input type="hidden" name="processType" value="">
+    <a href="javascript:document.admin.submit()">admin</a>
+</form>
+<a href="#" onclick="disp(document.readerBan)">Show Ban Form</a>
+<a href="#" onclick="disp(document.readerUnBan)">Show UnBan Form</a>
+<a href="#" onclick="disp(document.readerDelete)">Show Delete Form</a>
+<hr>
+<br>
+<form name="readerBan" method="POST" th:action="@{/admin/readerBan}" style="display: none">
+    <h3>Ban Form</h3>
+    <div><label> ReaderId : <input type="number" name="readerId"/></label></div>
+    <a href="javascript:document.readerBan.submit()">Ban Reader</a>
+</form>
+<form name="readerUnBan" method="POST" th:action="@{/admin/readerUnBan}" style="display: none">
+    <h3>Ban Form</h3>
+    <div><label> ReaderId : <input type="number" name="readerId"/></label></div>
+    <a href="javascript:document.readerUnBan.submit()">UnBan Reader</a>
+</form>
+<form name="readerDelete" method="POST" th:action="@{/admin/readerDelete}" style="display: none">
+    <h3>Delete Form</h3>
+    <div><label> ReaderId : <input type="number" name="readerId"/></label></div>
+    <a href="javascript:document.readerDelete.submit()">Delete</a>
+</form>
+
+<br>
+<table>
+    <tr>
+        <th>ID</th>
+        <th>NAME</th>
+        <th>books</th>
+        <th>authorities</th>
+        <th>accountNonExpired</th>
+        <th>accountNonLocked</th>
+        <th>credentialsNonExpired</th>
+        <th>enabled</th>
+    </tr>
+    <tr th:each="reader : ${readers}">
+        <td th:text="${reader.id}"></td>
+        <td th:text="${reader.username}"></td>
+        <!--<td th:each="book : ${reader.books}" th:text="${book.nameBook}"></td>-->
+        <td th:text="${reader.books}"></td>
+        <td th:text="${reader.authorities}"></td>
+        <td th:text="${reader.accountNonExpired}"></td>
+        <td th:text="${reader.accountNonLocked}"></td>
+        <td th:text="${reader.credentialsNonExpired}"></td>
+        <td th:text="${reader.enabled}"></td>
+    </tr>
+</table>
+</body>
+</html>
